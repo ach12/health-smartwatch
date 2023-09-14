@@ -7,5 +7,5 @@ The smartwatch displays typical information such as time, date, location and wea
 ![](https://github.com/ach12/Smartwatch-using-ESP32/blob/main/smartwatch-demo.gif)
 
 This is the current schematic for the smartwatch.
-![alt text](https://github.com/ach12/Smartwatch-using-ESP32/blob/main/ESP32-Smartwatch-Schematic.pdf?raw=true)
+![alt text](https://github.com/ach12/Smartwatch-using-ESP32/blob/main/ESP32-smartwatch-schematic.jpg?raw=true)
 
