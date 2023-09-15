@@ -1,19 +1,3 @@
-// watch2.ini
-// writing to LED screen, want three different watch displays
-// screen 0 : time, date, weather, location
-// screen 1 : chronometer, minuter
-// screen 2 : connetion to health band
-// LED screen specifications : green tab ST7735 128 x 160
-// setup for this screen can be found in Documents/PlatformIO/Projects/watch2/.pio/libdeps/esp32doit-devkit-v1/TFT_eSPI
-  // #define ST7735_GREENTAB2
-  // #define TFT_MOSI 23
-  // #define TFT_SCLK 18
-  // #define TFT_CS   5  // Chip select control pin
-  // #define TFT_DC   21  // Data Command control pin
-  // #define TFT_RST  -1  // Set TFT_RST to -1 if display RESET is connected to ESP32 board RST
-
-// Sets the size of text that follows. The default size is “1”. Each change in size increases the text by 10 pixels in height. That is, size 1 = 10 pixels, size 2 =20 pixels, and so on.
-
 #include "weathericons.h" // holds all the c arrays of the weather icons
 
 #include <Arduino.h>
@@ -31,10 +15,6 @@
 #include "freertos/timers.h"
 #include "esp_timer.h" // esp-idf has its own way to create software timers
 
-static const char *TAG = "i2c-example";
-#include "driver/i2c.h"
-#include "esp_log.h" // will use to dump hex values received from the slave to the console
-//#define I2C_SLAVE_ADDR 0x53 // ADXL345 address (SDO is grounded)
 #define BOTTOMBUTTON 34
 
 static TimerHandle_t oneShotToZeroTimer = NULL;
@@ -43,16 +23,16 @@ int screenNum = 0; // which screen to present
 
 TFT_eSPI tft = TFT_eSPI();
 
-const char* ssid = "twitch.tv/quin69";
-const char* password = "Onigoroshi69";
+const char* ssid = "";
+const char* password = "";
 
 
 const char* ntpServer = "pool.ntp.org";
 long  rawOffset = 0;
 int   dstOffset = 0;
 
-String googleMapsKey = "AIzaSyA8CLgFPtFWO3Ga5guEjC6Os3_NVDzaBng";
-String weatherbitKey = "eeee1c3923484bd783cf8d7d266b9df0";
+String googleMapsKey = "";
+String weatherbitKey = "";
 
 struct Weatherbit{
   String location; // Vancouver, CA
@@ -436,13 +416,6 @@ void screen2(void *pvParameters){ // screen 2 connects to health band
       tft.fillScreen(TFT_BLUE);
       tft.setTextColor(TFT_WHITE, TFT_BLUE); // font, background
       tft.drawString("PLACEHOLDER", 5, 140, 2);
-//      uint8_t rx_data[8]; // example sends 5 bytes of data from 1 to 5...
-//      // i2c_master_read_from_device(i2c_port_t i2c_num, uint8_t device_address, uint8_t *read_buffer, size_t read_size, TickType_t ticks_to_wait); // receiving data from I2C slave
-//      i2c_master_read_from_device(I2C_NUM_0, I2C_SLAVE_ADDR, rx_data, 6, 1000/portTICK_RATE_MS);
-//      ESP_LOG_BUFFER_HEX(TAG, rx_data, 5);
-
-//		  vTaskDelay(1000/portTICK_RATE_MS);
-
     }
   }
 }
@@ -466,21 +439,6 @@ void setup() {
     Serial.print("Local ESP32 IP: ");
     Serial.println(WiFi.localIP());
   } 
-
-
-  //i2c_config_t conf = {
- //   .mode = I2C_MODE_MASTER,
- //   .sda_io_num = 21,
- //   .scl_io_num = 22,
- //   .sda_pullup_en = GPIO_PULLUP_ENABLE,
- //   .scl_pullup_en = GPIO_PULLUP_ENABLE,
- //   .master.clk_speed = 100000,
-//  }; // configuring the driver
-//  i2c_param_config(I2C_NUM_0, &conf); // initialize configuration for master at port 0
-
-//  i2c_driver_install(I2C_NUM_0, I2C_MODE_MASTER, 0, 0, 0);
-
-  // ADXL345 address is 0x53
 
   String latlng = geolocate();
   timezone(latlng); // determines timezone based on coordinates
@@ -514,19 +472,3 @@ void setup() {
 }
 
 void loop() {}
-
-
-      // tft.pushImage(0, 0, 21, 21, clearday); //xpos,ypos, xsize, ysize, name
-      // tft.pushImage(0, 115, 21, 21, clearnight); //xpos,ypos, xsize, ysize, name
-      // tft.pushImage(50, 0, 21, 21, clouds); //xpos,ypos, xsize, ysize, name
-      // tft.pushImage(75, 0, 21, 21, drizzle); //xpos,ypos, xsize, ysize, name
-      // tft.pushImage(100, 0, 21, 21, fog); //xpos,ypos, xsize, ysize, name
-      // tft.pushImage(0, 25, 21, 21, heavysnow); //xpos,ypos, xsize, ysize, name
-      // tft.pushImage(25, 25, 21, 21, partlycloudyday); //xpos,ypos, xsize, ysize, name
-      // tft.pushImage(50, 25, 21, 21, partlycloudynight); //xpos,ypos, xsize, ysize, name
-      // tft.pushImage(75, 25, 21, 21, rain); //xpos,ypos, xsize, ysize, name
-      // tft.pushImage(100, 25, 21, 21, sleet); //xpos,ypos, xsize, ysize, name
-      // tft.pushImage(0, 50, 21, 21, thunder); //xpos,ypos, xsize, ysize, name
-      // tft.pushImage(25, 50, 21, 21, thunderrain); //xpos,ypos, xsize, ysize, name
-      // tft.pushImage(50, 50, 21, 21, heavyrain); //xpos,ypos, xsize, ysize, name
-      // tft.pushImage(75, 50, 21, 21, snow); //xpos,ypos, xsize, ysize, name
